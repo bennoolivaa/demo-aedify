@@ -225,6 +225,44 @@ h2 em,h1 em{color:var(--verde)}
 .cta-riga small{color:var(--ink-3);font-size:.92rem}
 .sez-notte .cta-riga small{color:var(--su-scuro-3)}
 
+/* ---------- grafico ore: adesso vs con Aedify ---------- */
+.ore-pannello{margin-top:clamp(36px,5vw,56px);border-radius:var(--r-xl);border:1px solid var(--linea-scura);background:rgba(244,246,242,.03);padding:clamp(22px,3.4vw,44px)}
+.ore-testa{display:flex;justify-content:space-between;align-items:flex-end;gap:16px 30px;flex-wrap:wrap;margin-bottom:clamp(26px,3vw,38px)}
+.ore-testa h3{margin-top:12px;font-size:clamp(1.3rem,1rem + 1vw,1.9rem);font-weight:450;letter-spacing:-.03em;max-width:26ch}
+.ore-testa small{color:var(--su-scuro-2);font-size:.88rem}
+.ore-grafico{display:grid;gap:18px}
+.ore-riga{display:grid;grid-template-columns:200px 1fr 190px;gap:22px;align-items:center}
+.ore-et{font-weight:700;font-size:1.02rem}
+.ore-et small{display:block;font-weight:500;font-size:.8rem;color:var(--su-scuro-2);margin-top:2px}
+.ore-traccia{position:relative;height:46px;border-radius:12px;background:repeating-linear-gradient(90deg,rgba(244,246,242,.1) 0 1px,transparent 1px calc(100%/6)),rgba(244,246,242,.05)}
+.ore-traccia.senza{height:22px;background:none}
+.ore-traccia.senza span{position:absolute;top:0;translate:-50% 0;font-size:.8rem;font-weight:600;color:var(--su-scuro-2);font-variant-numeric:tabular-nums}
+.ore-barra{position:absolute;top:0;bottom:0;left:var(--da);width:var(--a);border-radius:12px;transform-origin:left;transition:transform 1.3s var(--ease)}
+.ore-barra.rosso{background:#d0644f}
+.ore-barra.rosso.range{background:repeating-linear-gradient(-45deg,rgba(208,100,79,.75) 0 7px,rgba(208,100,79,.28) 7px 14px);border-radius:0 12px 12px 0}
+.ore-barra.rosso:not(.range){border-radius:12px 0 0 12px}
+.ore-barra.verde{background:linear-gradient(90deg,var(--verde),var(--verde-2))}
+.js .ore-pannello:not(.visto) .ore-barra{transform:scaleX(0)}
+.js .ore-pannello .ore-barra.range{transition-delay:.9s}
+.ore-val{font-size:1.5rem;font-weight:600;letter-spacing:-.03em;line-height:1.1}
+.ore-val small{display:block;font-size:.8rem;font-weight:600;letter-spacing:0;color:var(--su-scuro-2);margin-top:2px}
+.ore-val.rosso{color:#f0a090}
+.ore-val.verde{color:var(--verde-2)}
+.ore-asse .ore-val{font-size:.8rem;color:var(--su-scuro-2);font-weight:600}
+.ore-kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:clamp(28px,3.4vw,40px);border-radius:var(--r-lg);overflow:hidden;background:var(--linea-scura);border:1px solid var(--linea-scura)}
+.ore-kpi>div{padding:24px 26px;background:var(--notte)}
+.ore-kpi strong{display:block;font-size:clamp(2.4rem,1.6rem + 2.4vw,3.8rem);font-weight:400;letter-spacing:-.05em;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ore-kpi>div>span{display:block;margin-top:12px;font-weight:700}
+.ore-kpi p{color:var(--su-scuro-2);font-size:.92rem}
+@media (max-width:820px){
+  .ore-riga{grid-template-columns:1fr auto;gap:10px 14px}
+  .ore-riga .ore-traccia{grid-column:1/-1;grid-row:2}
+  .ore-asse{grid-template-columns:1fr}
+  .ore-asse>span,.ore-asse .ore-val{display:none}
+  .ore-asse .ore-traccia{grid-row:auto}
+  .ore-kpi{grid-template-columns:1fr}
+}
+
 /* ---------- bento ---------- */
 .bento{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
 .tessera{position:relative;border-radius:var(--r-xl);padding:clamp(24px,3vw,38px);background:var(--scheda);border:1px solid var(--linea);overflow:hidden}
