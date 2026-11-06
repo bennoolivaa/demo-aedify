@@ -33,6 +33,7 @@ p{margin:0}
 ul,ol{margin:0;padding:0}
 button,input,select,textarea{font:inherit;color:inherit}
 h1,h2,h3,h4{margin:0;font-weight:400;letter-spacing:-.035em;line-height:1.04;text-wrap:balance}
+p,li,small,blockquote,figcaption,summary,dd{text-wrap:pretty}
 em{font-family:var(--serif);font-style:italic;font-weight:420;letter-spacing:-.02em}
 strong,b{font-weight:700}
 ::selection{background:var(--verde-2);color:var(--notte)}
@@ -317,7 +318,7 @@ h2 em,h1 em{color:var(--verde)}
 .bolla.io{align-self:flex-end;background:#d9fdd3;border-top-right-radius:4px}
 .bolla.lui{align-self:flex-start;background:#fff;border-top-left-radius:4px}
 .bolla.lui b{color:var(--verde)}
-.bolla.vocale{display:flex;align-items:center;gap:10px;min-width:210px}
+.bolla.vocale{display:flex;align-items:center;gap:10px;width:min(210px,80%)}
 .bolla.vocale .play{width:30px;height:30px;border-radius:50%;background:#5c7a6c;display:grid;place-items:center;color:#fff;flex:none}
 .bolla.vocale .onda{flex:1;height:22px;background:repeating-linear-gradient(90deg,#8aa597 0 2px,transparent 2px 5px);-webkit-mask:linear-gradient(90deg,#000 0 100%);mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 22' preserveAspectRatio='none'%3E%3Cpath d='M0 11h4V8h4v8h4V5h4v12h4V3h4v16h4V7h4v8h4V9h4v4h4V6h4v10h4V4h4v14h4V8h4v6h4V10h4v2h4' fill='none' stroke='%23000' stroke-width='3'/%3E%3C/svg%3E") center/100% 100%}
 .bolla.doc{display:flex;gap:10px;align-items:center}
@@ -700,7 +701,7 @@ table.tabella{width:100%;border-collapse:collapse;font-size:.95rem;min-width:620
   .carte-4{grid-template-columns:repeat(2,1fr)}
 }
 @media (max-width:960px){
-  .eroe-testo,.eroe-griglia,.griglia-2,.demo-griglia,.storia,.problemi-foto,.legale-griglia{grid-template-columns:1fr}
+  .eroe-testo,.eroe-griglia,.griglia-2,.demo-griglia,.storia,.problemi-foto,.legale-griglia{grid-template-columns:minmax(0,1fr)}
   .legale-indice{display:none}
   .passi,.problemi,.carte,.carte-foto,.squadra,.valori,.fasi{grid-template-columns:1fr}
   .gruppo{grid-template-columns:1fr}

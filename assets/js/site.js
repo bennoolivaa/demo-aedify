@@ -228,6 +228,82 @@
     });
   });
 
+  /* ---------- niente parole orfane: lega l'ultima parola alla precedente, se ci sta ---------- */
+  var legati = [], sciolti = [], rimpiccioliti = [];
+  function metti(x, ch) { x.n.textContent = x.n.textContent.slice(0, x.i) + ch + x.n.textContent.slice(x.i + 1); }
+  function slega(x) { metti(x, " "); }
+  function sborda(el) {
+    var box = el.getBoundingClientRect(), lim = box.right - parseFloat(getComputedStyle(el).paddingRight) + 1;
+    var rr = doc.createRange(); rr.selectNodeContents(el);
+    if (box.right > html.clientWidth + 1 || html.scrollWidth > html.clientWidth) return true;
+    return Array.prototype.some.call(rr.getClientRects(), function (q) { return q.right > lim; });
+  }
+  function nbspPrima(nodi, da) {
+    // il primo spazio indivisibile prima della penultima parola (legame messo dal generatore)
+    var k = nodi.indexOf(da.n), i = da.i - 1;
+    while (k >= 0) {
+      var c = nodi[k].textContent.charAt(i);
+      if (c === " ") return { n: nodi[k], i: i };
+      if (c === " " || c === "\n") return null;
+      i--; if (i < 0) { k--; if (k >= 0) i = nodi[k].textContent.length - 1; }
+    }
+    return null;
+  }
+  function antiOrfane() {
+    legati.forEach(slega);
+    sciolti.forEach(function (x) { metti(x, " "); });
+    rimpiccioliti.forEach(function (el) { el.style.fontSize = ""; });
+    legati = []; sciolti = []; rimpiccioliti = [];
+    $$("h1,h2,h3,h4,p,li,blockquote,summary,figcaption,small,.carta-foto h3").forEach(function (el) {
+      if (!el.offsetParent || el.closest(".manifesto,.piede-gigante,.tendina,.menu-mobile,.ai-chat,.wa-chat")) return;
+      if (el.textContent.trim().split(/\s+/).length < 3) return;
+      var tw = doc.createTreeWalker(el, NodeFilter.SHOW_TEXT), n, nodi = [];
+      while ((n = tw.nextNode())) if (n.textContent.length) nodi.push(n);
+      if (!nodi.length) return;
+      // dalla fine: salta gli spazi finali, poi l'ultima parola, fino allo spazio normale che la separa
+      var k = nodi.length - 1, i = nodi[k].textContent.length - 1, fase = 0, primo = null, spazio = null;
+      while (k >= 0) {
+        var c = nodi[k].textContent.charAt(i);
+        var bianco = c === " " || c === "\n" || c === "\t" || c === "\r";
+        if (fase === 0) { if (!bianco && c !== " ") { fase = 1; primo = { n: nodi[k], i: i }; } }
+        else if (bianco) { spazio = { n: nodi[k], i: i }; break; }
+        else { primo = { n: nodi[k], i: i }; }
+        i--;
+        if (i < 0) { k--; if (k >= 0) i = nodi[k].textContent.length - 1; }
+      }
+      if (!spazio || spazio.i === 0) return;
+      var r1 = doc.createRange(); r1.setStart(primo.n, primo.i); r1.setEnd(primo.n, primo.i + 1);
+      var r0 = doc.createRange(); r0.setStart(spazio.n, spazio.i - 1); r0.setEnd(spazio.n, spazio.i);
+      var a = r1.getClientRects()[0], b = r0.getClientRects()[0];
+      if (!a || !b || a.top <= b.top + 3) return;
+      var t = spazio.n.textContent;
+      spazio.n.textContent = t.slice(0, spazio.i) + " " + t.slice(spazio.i + 1);
+      legati.push(spazio);
+      if (!sborda(el)) return;
+      // 1) sciolgo il legame della parolina prima ("di qualsiasi" → "di / qualsiasi spiegazione")
+      var nb = nbspPrima(nodi, spazio);
+      if (nb) { metti(nb, " "); sciolti.push(nb); if (!sborda(el)) return; }
+      // 2) solo nei titoli grandi: rimpicciolisco il carattere fino al 20% perché la coppia ci stia
+      if (/^H[12]$/.test(el.tagName)) {
+        var base = parseFloat(getComputedStyle(el).fontSize);
+        for (var f = 0.96; f >= (el.tagName === "H1" ? 0.72 : 0.8); f -= 0.04) {
+          el.style.fontSize = (base * f) + "px";
+          if (!sborda(el)) { rimpiccioliti.push(el); return; }
+        }
+        el.style.fontSize = "";
+      }
+      // niente da fare: torno com'era
+      slega(legati.pop());
+      if (nb) { metti(nb, " "); sciolti.pop(); }
+    });
+  }
+  var timerOrfane;
+  function programmaOrfane() { clearTimeout(timerOrfane); timerOrfane = setTimeout(antiOrfane, 120); }
+  antiOrfane();
+  if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(programmaOrfane);
+  addEventListener("resize", programmaOrfane);
+  addEventListener("load", programmaOrfane);
+
   /* ---------- modulo demo ---------- */
   var modulo = $("[data-modulo-demo]");
   if (modulo) {
